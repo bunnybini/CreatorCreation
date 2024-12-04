@@ -50,9 +50,6 @@ Respond appropriately and maintain continuity in the conversation.
 
 // ---------- TERMINAL ---------- //
 // ---------- TERMINAL ---------- //
-// ---------- TERMINAL ---------- //
-// ---------- TERMINAL ---------- //
-// ---------- TERMINAL ---------- //
 
 document.fonts.ready.then(() => {
   const term = $("#commandDiv").terminal(
@@ -77,8 +74,12 @@ document.fonts.ready.then(() => {
         // Generate prompt for AI API
         const prompt = evaluationPrompt(personalityState, input);
 
+        console.log(
+          `Current Personality: ${personalityState}, User Input: ${input}`
+        );
+
         // Fetch AI response from API
-        const aiResponse = await fetchAIResponse(input);
+        const aiResponse = await fetchAIResponse(prompt);
 
         // Display AI response in the terminal
         this.echo(`AI [${personalityState}]: ${aiResponse}`);
@@ -102,7 +103,7 @@ document.fonts.ready.then(() => {
           }
 
           const prompt = evaluationPrompt(personalityState, input);
-          const aiResponse = await fetchAIResponse(input);
+          const aiResponse = await fetchAIResponse(prompt);
           this.echo(`AI [${personalityState}]: ${aiResponse}`);
         });
       },
@@ -114,20 +115,17 @@ document.fonts.ready.then(() => {
 
 // ---------- AI ---------- //
 // ---------- AI ---------- //
-// ---------- AI ---------- //
-// ---------- AI ---------- //
-// ---------- AI ---------- //
 
-async function fetchAIResponse(input) {
-  console.log(`--fetchAIResponse started --input: ${input}`);
+async function fetchAIResponse(prompt) {
+  console.log(`--fetchAIResponse started --input: ${prompt}`);
 
   try {
-    const response = await fetch("http://localhost:5500/submit", {
+    const response = await fetch("/submit", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ input }), // Correctly pass the input as per backend expectations
+      body: JSON.stringify({ prompt }), // Correctly pass the input as per backend expectations
     });
 
     if (response.ok) {

@@ -8,7 +8,7 @@
     "start": "node index-gemini.js",
     "gemini": "node gemini.js",
     "gpt": "nodemon index-gpt.js",
-    "gem": "nodemon index-gemini.js",
+    "gem": "nodemon gemini.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "chrissy",

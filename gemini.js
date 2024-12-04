@@ -41,7 +41,7 @@ async function getGenResultAsString(input) {
   console.log(`--User input: [${input}]`);
   console.log("--Gemini Request Sent");
 
-  const genAI = new GoogleGenerativeAI(process.env.GOOGLEAPIKEY);
+  const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 
   // const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro-latest"});
   //gemini-1.5-pro-latest -> better than gemini-pro but too easy to exhaust
