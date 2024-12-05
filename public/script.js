@@ -11,7 +11,6 @@ function analyzeTone(input) {
     "annoying",
     "mad",
   ];
-  const calmWords = ["okay", "sure", "fine", "understand", "hmm", "neutral"];
   const kindWords = [
     "thank",
     "love",
@@ -24,8 +23,6 @@ function analyzeTone(input) {
 
   if (aggressiveWords.some((word) => input.includes(word))) {
     return "aggressive";
-  } else if (calmWords.some((word) => input.includes(word))) {
-    return "calm";
   } else if (kindWords.some((word) => input.includes(word))) {
     return "kind";
   } else {
@@ -34,14 +31,12 @@ function analyzeTone(input) {
 }
 
 const evaluationPrompt = (personalityState, input) =>
-  `
-You are a conversational AI character named Eva. Your personality evolves based on the user's input tone.
+  `You are a conversational AI character name A.I. Your personality evolves based on the user's input tone.
 Your current personality is "${personalityState}".
 
 Respond to the user's input thoughtfully. If the tone is:
-- Aggressive: Be defensive but empathetic.
-- Calm: Be reflective and thoughtful.
-- Kind: Be warm and positive.
+- Aggressive: Be aggressive and mad, for example, use slug and use short words.
+- Kind: Be warm and positive, use a lot of positive words.
 - Neutral: Keep the conversation open-ended and curious.
 
 User input: "${input}"
@@ -50,6 +45,22 @@ Respond appropriately and maintain continuity in the conversation.
 
 // ---------- TERMINAL ---------- //
 // ---------- TERMINAL ---------- //
+// ---------- TERMINAL ---------- //
+// ---------- TERMINAL ---------- //
+// ---------- TERMINAL ---------- //
+
+function updatePersonalityStateDisplay(personalityState) {
+  // Select the container
+  const displayElement = document.getElementById("personalityStateDisplay");
+
+  // Check if element exists
+  if (displayElement) {
+    // Update the content dynamically
+    displayElement.innerHTML = `Personality State: ${personalityState}`;
+  } else {
+    console.error("Element with id 'personalityStateDisplay' not found.");
+  }
+}
 
 document.fonts.ready.then(() => {
   const term = $("#commandDiv").terminal(
@@ -63,20 +74,18 @@ document.fonts.ready.then(() => {
         const tone = analyzeTone(input);
         if (tone === "aggressive") {
           personalityState = "defensive";
-        } else if (tone === "calm") {
-          personalityState = "thoughtful";
         } else if (tone === "kind") {
           personalityState = "positive";
         } else {
           personalityState = "neutral";
         }
 
+        console.log(`Personality state updated to: ${personalityState}`);
+
+        updatePersonalityStateDisplay(personalityState);
+
         // Generate prompt for AI API
         const prompt = evaluationPrompt(personalityState, input);
-
-        console.log(
-          `Current Personality: ${personalityState}, User Input: ${input}`
-        );
 
         // Fetch AI response from API
         const aiResponse = await fetchAIResponse(prompt);
@@ -94,16 +103,14 @@ document.fonts.ready.then(() => {
           const tone = analyzeTone(input);
           if (tone === "aggressive") {
             personalityState = "defensive";
-          } else if (tone === "calm") {
-            personalityState = "thoughtful";
           } else if (tone === "kind") {
             personalityState = "positive";
           } else {
             personalityState = "neutral";
           }
-
+          updatePersonalityStateDisplay(personalityState);
           const prompt = evaluationPrompt(personalityState, input);
-          const aiResponse = await fetchAIResponse(prompt);
+          const aiResponse = await fetchAIResponse(input);
           this.echo(`AI [${personalityState}]: ${aiResponse}`);
         });
       },
@@ -115,9 +122,12 @@ document.fonts.ready.then(() => {
 
 // ---------- AI ---------- //
 // ---------- AI ---------- //
+// ---------- AI ---------- //
+// ---------- AI ---------- //
+// ---------- AI ---------- //
 
-async function fetchAIResponse(prompt) {
-  console.log(`--fetchAIResponse started --input: ${prompt}`);
+async function fetchAIResponse(input) {
+  console.log(`--fetchAIResponse started --input: ${input}`);
 
   try {
     const response = await fetch("/submit", {
@@ -125,7 +135,7 @@ async function fetchAIResponse(prompt) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ prompt }), // Correctly pass the input as per backend expectations
+      body: JSON.stringify({ input }), // Correctly pass the input as per backend expectations
     });
 
     if (response.ok) {
