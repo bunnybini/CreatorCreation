@@ -1,8 +1,8 @@
 {
-  "name": "eva-terminal",
+  "name": "ai-personality",
   "version": "1.0.0",
-  "description": "eva terminal",
-  "main": "index-gemini.js",
+  "description": "ai-personality",
+  "main": "gemini.js",
   "type": "module",
   "scripts": {
     "start": "node index-gemini.js",
@@ -11,7 +11,7 @@
     "gem": "nodemon gemini.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "chrissy",
+  "author": "bini",
   "license": "ISC",
   "dependencies": {
     "@google/generative-ai": "^0.7.1",
